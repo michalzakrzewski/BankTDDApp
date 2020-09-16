@@ -4,9 +4,9 @@ import com.zakrzewski.models.ClientModel;
 import com.zakrzewski.repositories.InMemoryClientRepository;
 import com.zakrzewski.services.BankService;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 
 public class MainApp {
     private BankService bankService;
@@ -16,7 +16,7 @@ public class MainApp {
     }
 
     public void run(){
-        InMemoryClientRepository inMemoryClientRepository = new InMemoryClientRepository(new HashSet<>());
+        InMemoryClientRepository inMemoryClientRepository = new InMemoryClientRepository(new ArrayList<>());
         bankService = new BankService(inMemoryClientRepository);
 
         try (Scanner scanner = new Scanner(System.in)) {

@@ -7,14 +7,14 @@ public class ClientModel {
     private String firstName;
     private String lastName;
     private int age;
-    private double amount;
+    private double balance;
     private String emailAddress;
 
-    public ClientModel(String firstName, String lastName, int age, double amount, String emailAddress) {
+    public ClientModel(String firstName, String lastName, int age, double balance, String emailAddress) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        this.amount = amount;
+        this.balance = balance;
         this.emailAddress = emailAddress;
     }
 
@@ -42,12 +42,12 @@ public class ClientModel {
         this.age = age;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getBalance() {
+        return balance;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public String getEmailAddress() {
@@ -64,7 +64,7 @@ public class ClientModel {
         if (o == null || getClass() != o.getClass()) return false;
         ClientModel that = (ClientModel) o;
         return age == that.age &&
-                Double.compare(that.amount, amount) == 0 &&
+                Double.compare(that.balance, balance) == 0 &&
                 Objects.equals(firstName, that.firstName) &&
                 Objects.equals(lastName, that.lastName) &&
                 Objects.equals(emailAddress, that.emailAddress);
@@ -72,7 +72,7 @@ public class ClientModel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, age, amount, emailAddress);
+        return Objects.hash(firstName, lastName, age, balance, emailAddress);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ClientModel {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
-                ", amount=" + amount +
+                ", amount=" + balance +
                 ", emailAddress='" + emailAddress + '\'' +
                 '}';
     }

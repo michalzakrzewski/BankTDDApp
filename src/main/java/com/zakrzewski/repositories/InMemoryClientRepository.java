@@ -9,9 +9,9 @@ import java.util.Set;
 
 public class InMemoryClientRepository implements ClientRepository {
 
-    private Set<ClientModel> clients;
+    private List<ClientModel> clients;
 
-    public InMemoryClientRepository(Set<ClientModel> clients) {
+    public InMemoryClientRepository(List<ClientModel> clients) {
         this.clients = clients;
     }
 
@@ -19,7 +19,7 @@ public class InMemoryClientRepository implements ClientRepository {
         clients.add(client);
     }
 
-    public Set<ClientModel> findAllClients() {
+    public List<ClientModel> findAllClients() {
         return clients;
     }
 
