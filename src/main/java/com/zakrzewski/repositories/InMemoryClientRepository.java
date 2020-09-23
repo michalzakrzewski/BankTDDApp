@@ -5,7 +5,6 @@ import com.zakrzewski.models.ClientModel;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Set;
 
 public class InMemoryClientRepository implements ClientRepository {
 

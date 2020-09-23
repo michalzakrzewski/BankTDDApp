@@ -3,6 +3,8 @@ package com.zakrzewski.services;
 import com.zakrzewski.models.ClientModel;
 import com.zakrzewski.repositories.InMemoryClientRepository;
 
+import java.util.Objects;
+
 public class BankService {
 
     private InMemoryClientRepository inMemoryBankRepository;
@@ -24,9 +26,7 @@ public class BankService {
     }
 
     public void transferAmount(String fromEmail, String toEmail, double amount){
-        if (amount < 0){
-            throw new IllegalArgumentException("Negative amount is not allowed!");
-        }
+        validateAmount(amount);
         if (fromEmail.equals(toEmail)){
             throw new IllegalArgumentException("fromEmail and toEmail can't be equal! ");
         }
@@ -42,15 +42,23 @@ public class BankService {
     }
 
 
-    public void withdrawAmount(String emailAddress, int amount) {
-        if (amount <= 0){
-            throw new IllegalArgumentException("Amount can not be negative");
+    public void withdrawAmount(String emailAddress, double amount) {
+        validateAmount(amount);
+        if (Objects.isNull(emailAddress)){
+            throw new IllegalArgumentException("Email can not be null!");
         }
-        ClientModel clientByEmail = inMemoryBankRepository.findClientByEmail(emailAddress);
+        String lowerCaseEmail = emailAddress.toLowerCase();
+        ClientModel clientByEmail = inMemoryBankRepository.findClientByEmail(lowerCaseEmail);
         if (amount > clientByEmail.getBalance()){
-            throw new NotEnoughFundsException("Not enough funds. Balance must be higher or equal than amount!");
+            throw new NotEnoughFundsException("Not enough funds. Balance must be higher or equal then amount!");
         }
         double newBalance = clientByEmail.getBalance() - amount;
         clientByEmail.setBalance(newBalance);
+    }
+
+    private void validateAmount(double amount) {
+        if (amount <= 0){
+            throw new IllegalArgumentException("Negative amount is not allowed!");
+        }
     }
 }

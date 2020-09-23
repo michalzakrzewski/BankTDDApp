@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -170,6 +171,48 @@ public class BankServiceTest {
         int amount = 100000;
         // when/then
         Assertions.assertThrows(NotEnoughFundsException.class, () -> bankService.withdrawAmount(client.getEmailAddress(), amount));
+    }
+
+    @Test
+    public void withdrawAmount_incorrectEmail_throwNoSuchElementException(){
+        //given
+        String email = "incorect_email@o2.pl";
+        int amount = 1000;
+        //when/then
+        Assertions.assertThrows(NoSuchElementException.class, () -> bankService.withdrawAmount(email, amount));
+    }
+
+    @Test
+    public void withdrawAmount_upperCaseEmail_balanceChangedCorrectly(){
+        //given
+        String emailAddress = "MICHAL@GMAIL.COM";
+        ClientModel client = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
+        clients.add(client);
+        //when
+
+        bankService.withdrawAmount(emailAddress, 20000);
+        //then
+        assertEquals("michal@gmail.com", client.getEmailAddress());
+    }
+
+    @Test
+    public void withdrawAmount_nullEmail_throwIllegalArgumentException(){
+        //given
+        String email = null;
+        int amount = 1000;
+        //when/then
+        Assertions.assertThrows(IllegalArgumentException.class, () -> bankService.withdrawAmount(email, amount));
+    }
+
+    @Test
+    public void withdrawAmount_correctFloatingPointAmount_balanceChangedCorrectly(){
+        //given
+        ClientModel client = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
+        clients.add(client);
+        //when
+        bankService.withdrawAmount(client.getEmailAddress(), 5000.50);
+        //then
+        assertEquals(44999.50, client.getBalance());
     }
 
 }
