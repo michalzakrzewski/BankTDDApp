@@ -4,50 +4,22 @@ import java.util.Objects;
 
 public class ClientModel {
 
-    private String firstName;
-    private String lastName;
-    private int age;
-    private double balance;
+    private String name;
     private String emailAddress;
+    private double balance;
 
-    public ClientModel(String firstName, String lastName, int age, double balance, String emailAddress) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.balance = balance;
+    public ClientModel(String name, String emailAddress, double balance) {
+        this.name = name;
         this.emailAddress = emailAddress;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmailAddress() {
@@ -58,31 +30,35 @@ public class ClientModel {
         this.emailAddress = emailAddress;
     }
 
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClientModel that = (ClientModel) o;
-        return age == that.age &&
-                Double.compare(that.balance, balance) == 0 &&
-                Objects.equals(firstName, that.firstName) &&
-                Objects.equals(lastName, that.lastName) &&
+        return Double.compare(that.balance, balance) == 0 &&
+                Objects.equals(name, that.name) &&
                 Objects.equals(emailAddress, that.emailAddress);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, age, balance, emailAddress);
+        return Objects.hash(name, emailAddress, balance);
     }
 
     @Override
     public String toString() {
         return "ClientModel{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                ", amount=" + balance +
+                "name='" + name + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
+                ", balance=" + balance +
                 '}';
     }
 }

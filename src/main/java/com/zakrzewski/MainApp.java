@@ -1,11 +1,10 @@
 package com.zakrzewski;
 
 import com.zakrzewski.models.ClientModel;
-import com.zakrzewski.repositories.InMemoryClientRepository;
+import com.zakrzewski.repositories.ClientRepository;
+import com.zakrzewski.repositories.JDBCClientRepository;
 import com.zakrzewski.services.BankService;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class MainApp {
@@ -16,8 +15,8 @@ public class MainApp {
     }
 
     public void run(){
-        InMemoryClientRepository inMemoryClientRepository = new InMemoryClientRepository(new ArrayList<>());
-        bankService = new BankService(inMemoryClientRepository);
+        ClientRepository clientRepository = new JDBCClientRepository();
+        bankService = new BankService(clientRepository);
 
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
@@ -39,9 +38,6 @@ public class MainApp {
                 if (next.equals("4")){
                     transferAmount(scanner);
                 }
-                if (next.equals("5")){
-                    showAllClients();
-                }
             }
         }
     }
@@ -54,17 +50,13 @@ public class MainApp {
 
 
     private void addUser(Scanner scanner) {
-        System.out.println("Enter firstName:");
+        System.out.println("Enter name:");
         final String firstName = scanner.next();
-        System.out.println("Enter lastName:");
-        final String lastName = scanner.next();
-        System.out.println("Enter age:");
-        final int age = scanner.nextInt();
-        System.out.println("Enter amount:");
-        final double amount = scanner.nextDouble();
         System.out.println("Enter emailAddress:");
         final String emailAddress = scanner.next();
-        bankService.saveClient(new ClientModel(firstName, lastName, age, amount, emailAddress));
+        System.out.println("Enter balance:");
+        final double balance = scanner.nextDouble();
+        bankService.saveClient(new ClientModel(firstName, emailAddress, balance));
     }
 
     private void transferAmount(Scanner scanner){
@@ -73,12 +65,9 @@ public class MainApp {
         String fromEmail = scanner.next();
         System.out.print("To email: ");
         String toEmail = scanner.next();
-        System.out.print("Amount:");
+        System.out.print("balance:");
         double amount = scanner.nextDouble();
         bankService.transferAmount(fromEmail, toEmail, amount);
     }
 
-    private void showAllClients(){
-        bankService.findAllClients();
-    }
 }

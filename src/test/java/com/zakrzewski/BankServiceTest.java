@@ -32,8 +32,8 @@ public class BankServiceTest {
     @Test
     public void verifyIfUserIsAddingCorrectlyToTheRepository(){
         //given
-        ClientModel client = new ClientModel("Michał", "Zakrzewski", 26, 5000, "michal@gmail.com");
-        ClientModel expectedClient = new ClientModel("Michał", "Zakrzewski", 26, 5000, "michal@gmail.com");
+        ClientModel client = new ClientModel("Michał", "michal@gmail.com", 500);
+        ClientModel expectedClient = new ClientModel("Michał", "michal@gmail.com", 500);
         //when
         inMemoryClientRepository.addClient(client);
         ClientModel actualClient = clients.stream()
@@ -46,8 +46,8 @@ public class BankServiceTest {
     @Test
     public void transferAmount_allParamsOk_fundsTransferred() {
         //given
-        ClientModel clientFrom = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
-        ClientModel clientTo = new ClientModel("Client", "Client123", 33, 10000, "client@gmail.com");
+        ClientModel clientFrom = new ClientModel("Michał",  "michal@gmail.com", 50000);
+        ClientModel clientTo = new ClientModel("Client",  "client@gmail.com", 10000);
         final double amountToTransfer = 10000;
         clients.add(clientFrom);
         clients.add(clientTo);
@@ -69,8 +69,8 @@ public class BankServiceTest {
     @Test
     public void transfer_sendAllFunds_fundsTransferred(){
         //given
-        ClientModel clientFrom = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
-        ClientModel clientTo = new ClientModel("Client", "Client123", 33, 10000, "client@gmail.com");
+        ClientModel clientFrom = new ClientModel("Michał",  "michal@gmail.com", 5000 );
+        ClientModel clientTo = new ClientModel("Client", "client@gmail.com", 10000);
         final double amountToTransfer = 50000;
         clients.add(clientFrom);
         clients.add(clientTo);
@@ -90,8 +90,8 @@ public class BankServiceTest {
     @Test
     public void transfer_notEnoughFunds_throwNotEnoughFundException(){
         //given
-        ClientModel clientFrom = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
-        ClientModel clientTo = new ClientModel("Client", "Client123", 33, 10000, "client@gmail.com");
+        ClientModel clientFrom = new ClientModel("Michał", "michal@gmail.com", 50000);
+        ClientModel clientTo = new ClientModel("Client", "client@gmail.com", 10000);
         final double amountToTransfer = 60000;
         clients.add(clientFrom);
         clients.add(clientTo);
@@ -102,8 +102,8 @@ public class BankServiceTest {
     @Test
     public void transfer_negativeAmount_throwIllegalArgumentException(){
         //given
-        ClientModel clientFrom = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
-        ClientModel clientTo = new ClientModel("Client", "Client123", 33, 10000, "client@gmail.com");
+        ClientModel clientFrom = new ClientModel("Michał", "michal@gmail.com", 50000);
+        ClientModel clientTo = new ClientModel("Client", "client@gmail.com",  10000);
         final double amountToTransfer = -5000;
         clients.add(clientFrom);
         clients.add(clientTo);
@@ -114,7 +114,7 @@ public class BankServiceTest {
     @Test
     public void transfer_toSameClient_thrownIllegalArgumentException(){
         //given
-        ClientModel clientFrom = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
+        ClientModel clientFrom = new ClientModel("Michał", "michal@gmail.com", 50000);
         clients.add(clientFrom);
         final double amountToTransfer = 2000;
         // when/then
@@ -124,7 +124,7 @@ public class BankServiceTest {
     @Test
     public void withdrawAmount_correctAmount_balanceChangedCorrectly(){
         //given
-        ClientModel client = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
+        ClientModel client = new ClientModel("Michał", "michal@gmail.com", 50000);
         clients.add(client);
         //when
         bankService.withdrawAmount(client.getEmailAddress(), 40000);
@@ -135,7 +135,7 @@ public class BankServiceTest {
     @Test
     public void withdrawAmount_allBalance_balanceSetToZero(){
         //given
-        ClientModel client = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
+        ClientModel client = new ClientModel("Michał", "michal@gmail.com", 50000);
         clients.add(client);
         //when
         bankService.withdrawAmount(client.getEmailAddress(), 50000);
@@ -146,7 +146,7 @@ public class BankServiceTest {
     @Test
     public void withdrawAmount_negativeAmount_throwIllegalArgumentException(){
         //given
-        ClientModel client = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
+        ClientModel client = new ClientModel("Michał", "michal@gmail.com",  50000);
         clients.add(client);
         int amount = -10000;
         // when/then
@@ -156,7 +156,7 @@ public class BankServiceTest {
     @Test
     public void withdrawAmount_zeroAmount_throwIllegalArgumentException(){
         //given
-        ClientModel client = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
+        ClientModel client = new ClientModel("Michał", "michal@gmail.com",  50000);
         clients.add(client);
         int amount = 0;
         // when/then
@@ -166,7 +166,7 @@ public class BankServiceTest {
     @Test
     public void withdrawAmount_amountBiggerThanBalance_throwNotEnoughFundsException(){
         //given
-        ClientModel client = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
+        ClientModel client = new ClientModel("Michał", "michal@gmail.com",  50000);
         clients.add(client);
         int amount = 100000;
         // when/then
@@ -186,7 +186,7 @@ public class BankServiceTest {
     public void withdrawAmount_upperCaseEmail_balanceChangedCorrectly(){
         //given
         String emailAddress = "MICHAL@GMAIL.COM";
-        ClientModel client = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
+        ClientModel client = new ClientModel("Michał", "michal@gmail.com",  50000);
         clients.add(client);
         //when
 
@@ -207,7 +207,7 @@ public class BankServiceTest {
     @Test
     public void withdrawAmount_correctFloatingPointAmount_balanceChangedCorrectly(){
         //given
-        ClientModel client = new ClientModel("Michał", "Zakrzewski", 26, 50000, "michal@gmail.com");
+        ClientModel client = new ClientModel("Michał", "michal@gmail.com",  50000);
         clients.add(client);
         //when
         bankService.withdrawAmount(client.getEmailAddress(), 5000.50);

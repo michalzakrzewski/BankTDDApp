@@ -1,28 +1,24 @@
 package com.zakrzewski.services;
 
 import com.zakrzewski.models.ClientModel;
-import com.zakrzewski.repositories.InMemoryClientRepository;
+import com.zakrzewski.repositories.ClientRepository;
 
 import java.util.Objects;
 
 public class BankService {
 
-    private InMemoryClientRepository inMemoryBankRepository;
+    private ClientRepository clientRepository;
 
-    public BankService(InMemoryClientRepository inMemoryBankRepository) {
-        this.inMemoryBankRepository = inMemoryBankRepository;
+    public BankService(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
     }
 
     public void saveClient(ClientModel client){
-        inMemoryBankRepository.addClient(client);
-    }
-
-    public void findAllClients(){
-        System.out.println(inMemoryBankRepository.findAllClients());
+        clientRepository.addClient(client);
     }
 
     public ClientModel findClientByEmailAddress(String emailAddress){
-        return inMemoryBankRepository.findClientByEmail(emailAddress);
+        return clientRepository.findClientByEmail(emailAddress);
     }
 
     public void transferAmount(String fromEmail, String toEmail, double amount){
@@ -30,8 +26,8 @@ public class BankService {
         if (fromEmail.equals(toEmail)){
             throw new IllegalArgumentException("fromEmail and toEmail can't be equal! ");
         }
-        ClientModel fromClient = inMemoryBankRepository.findClientByEmail(fromEmail);
-        ClientModel toClient = inMemoryBankRepository.findClientByEmail(toEmail);
+        ClientModel fromClient = clientRepository.findClientByEmail(fromEmail);
+        ClientModel toClient = clientRepository.findClientByEmail(toEmail);
         if (fromClient.getBalance() - amount >= 0){
             fromClient.setBalance(fromClient.getBalance() - amount);
             toClient.setBalance(toClient.getBalance() + amount);
@@ -48,7 +44,7 @@ public class BankService {
             throw new IllegalArgumentException("Email can not be null!");
         }
         String lowerCaseEmail = emailAddress.toLowerCase();
-        ClientModel clientByEmail = inMemoryBankRepository.findClientByEmail(lowerCaseEmail);
+        ClientModel clientByEmail = clientRepository.findClientByEmail(lowerCaseEmail);
         if (amount > clientByEmail.getBalance()){
             throw new NotEnoughFundsException("Not enough funds. Balance must be higher or equal then amount!");
         }
