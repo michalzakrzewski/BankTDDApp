@@ -1,11 +1,12 @@
 package com.zakrzewski;
 
-import com.zakrzewski.models.ClientModel;
+import com.zakrzewski.entity.Account;
+import com.zakrzewski.entity.Client;
 import com.zakrzewski.repositories.ClientRepository;
-import com.zakrzewski.repositories.JDBCClientRepository;
+import com.zakrzewski.repositories.HibernateClientRepository;
 import com.zakrzewski.services.BankService;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class MainApp {
     private BankService bankService;
@@ -15,7 +16,7 @@ public class MainApp {
     }
 
     public void run(){
-        ClientRepository clientRepository = new JDBCClientRepository();
+        ClientRepository clientRepository = new HibernateClientRepository();
         bankService = new BankService(clientRepository);
 
         try (Scanner scanner = new Scanner(System.in)) {
@@ -24,7 +25,6 @@ public class MainApp {
                 System.out.println("2 - find user");
                 System.out.println("3 - exit app");
                 System.out.println("4 - transfer amount");
-                System.out.println("5 - show all clients");
                 final String next = scanner.next();
                 if (next.equals("1")) {
                     addUser(scanner);
@@ -56,7 +56,9 @@ public class MainApp {
         final String emailAddress = scanner.next();
         System.out.println("Enter balance:");
         final double balance = scanner.nextDouble();
-        bankService.saveClient(new ClientModel(firstName, emailAddress, balance));
+        Account account = new Account(balance, "PLN");
+        List<Account> accounts = Arrays.asList(account);
+        bankService.saveClient(new Client(firstName, emailAddress, accounts));
     }
 
     private void transferAmount(Scanner scanner){

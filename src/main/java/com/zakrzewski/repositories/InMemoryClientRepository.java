@@ -1,6 +1,6 @@
 package com.zakrzewski.repositories;
 
-import com.zakrzewski.models.ClientModel;
+import com.zakrzewski.entity.Client;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -8,21 +8,21 @@ import java.util.Objects;
 
 public class InMemoryClientRepository implements ClientRepository {
 
-    private List<ClientModel> clients;
+    private List<Client> clients;
 
-    public InMemoryClientRepository(List<ClientModel> clients) {
+    public InMemoryClientRepository(List<Client> clients) {
         this.clients = clients;
     }
 
-    public void addClient(ClientModel client) {
+    public void addClient(Client client) {
         clients.add(client);
     }
 
-    public List<ClientModel> findAllClients() {
+    public List<Client> findAllClients() {
         return clients;
     }
 
-    public ClientModel findClientByEmail(final String email) {
+    public Client findClientByEmail(final String email) {
         return clients.stream()
                 .filter(client -> Objects.equals(client.getEmailAddress(), email))
                 .findFirst()

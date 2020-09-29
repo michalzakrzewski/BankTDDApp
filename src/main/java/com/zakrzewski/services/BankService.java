@@ -1,6 +1,6 @@
 package com.zakrzewski.services;
 
-import com.zakrzewski.models.ClientModel;
+import com.zakrzewski.entity.Client;
 import com.zakrzewski.repositories.ClientRepository;
 
 import java.util.Objects;
@@ -13,11 +13,11 @@ public class BankService {
         this.clientRepository = clientRepository;
     }
 
-    public void saveClient(ClientModel client){
+    public void saveClient(Client client){
         clientRepository.addClient(client);
     }
 
-    public ClientModel findClientByEmailAddress(String emailAddress){
+    public Client findClientByEmailAddress(String emailAddress){
         return clientRepository.findClientByEmail(emailAddress);
     }
 
@@ -26,8 +26,8 @@ public class BankService {
         if (fromEmail.equals(toEmail)){
             throw new IllegalArgumentException("fromEmail and toEmail can't be equal! ");
         }
-        ClientModel fromClient = clientRepository.findClientByEmail(fromEmail);
-        ClientModel toClient = clientRepository.findClientByEmail(toEmail);
+        Client fromClient = clientRepository.findClientByEmail(fromEmail);
+        Client toClient = clientRepository.findClientByEmail(toEmail);
         if (fromClient.getBalance() - amount >= 0){
             fromClient.setBalance(fromClient.getBalance() - amount);
             toClient.setBalance(toClient.getBalance() + amount);
@@ -44,7 +44,7 @@ public class BankService {
             throw new IllegalArgumentException("Email can not be null!");
         }
         String lowerCaseEmail = emailAddress.toLowerCase();
-        ClientModel clientByEmail = clientRepository.findClientByEmail(lowerCaseEmail);
+        Client clientByEmail = clientRepository.findClientByEmail(lowerCaseEmail);
         if (amount > clientByEmail.getBalance()){
             throw new NotEnoughFundsException("Not enough funds. Balance must be higher or equal then amount!");
         }

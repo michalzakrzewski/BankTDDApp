@@ -1,8 +1,9 @@
 package com.zakrzewski.repositories;
 
-import com.zakrzewski.models.ClientModel;
+import com.zakrzewski.entity.Client;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class JDBCClientRepository implements ClientRepository {
 
@@ -10,7 +11,7 @@ public class JDBCClientRepository implements ClientRepository {
     public static final String PASSWORD = "kanapka";
     public static final String JDBC_URL = "jdbc:postgresql://localhost:5432/test_db";
     @Override
-    public void addClient(ClientModel client) {
+    public void addClient(Client client) {
         try(Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String firstName = client.getName();
             String emailAddress = client.getEmailAddress();
@@ -26,7 +27,7 @@ public class JDBCClientRepository implements ClientRepository {
     }
 
     @Override
-    public ClientModel findClientByEmail(String email) {
+    public Client findClientByEmail(String email) {
         try(Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             //Dlaczego nie VALUES('"+firstName"', '"+emailAddress+"')? Dlatego, że jak ktoś wpisze email jakiś i dopisze do niego DROP TABLE xxx to poleci baza.
             //Dlatego zawsze jest jakaś funkcja, która umożliwia wstawienie naszych stringow.
@@ -36,7 +37,7 @@ public class JDBCClientRepository implements ClientRepository {
             if (resultSet.next()){
                 String first_name = resultSet.getString("first_name");
                 String mail = resultSet.getString("mail");
-                return new ClientModel(first_name, mail, 0);
+                return new Client(first_name, mail, null);
             }
         } catch (SQLException e) {
             e.printStackTrace();
