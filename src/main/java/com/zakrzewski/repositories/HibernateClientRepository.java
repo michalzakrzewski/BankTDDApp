@@ -3,7 +3,9 @@ package com.zakrzewski.repositories;
 import com.zakrzewski.entity.Client;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class HibernateClientRepository implements ClientRepository {
     @Override
     public void saveClient(Client client) {

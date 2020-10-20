@@ -2,26 +2,30 @@ package com.zakrzewski;
 
 import com.zakrzewski.entity.Account;
 import com.zakrzewski.entity.Client;
-import com.zakrzewski.repositories.ClientRepository;
-import com.zakrzewski.repositories.HibernateClientRepository;
-import com.zakrzewski.repositories.InMemoryClientRepository;
 import com.zakrzewski.services.BankService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class MainApp {
+@SpringBootApplication
+public class MainApp implements CommandLineRunner {
     private BankService bankService;
 
-    public static void main(String[] args) {
-        new MainApp().run();
+    @Autowired
+    public MainApp(BankService bankService) {
+        this.bankService = bankService;
     }
 
-    public void run(){
-        ClientRepository clientRepository = new HibernateClientRepository();
-        bankService = new BankService(clientRepository);
-
+    public static void main(String[] args) {
+        SpringApplication.run(MainApp.class, args);
+    }
+    @Override
+    public void run(String... args) throws Exception {
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 System.out.println("1 - add user");
@@ -74,5 +78,6 @@ public class MainApp {
         double amount = scanner.nextDouble();
         bankService.transferAmount(fromEmail, toEmail, amount);
     }
+
 
 }

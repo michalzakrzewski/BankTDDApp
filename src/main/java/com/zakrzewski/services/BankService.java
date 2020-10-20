@@ -2,9 +2,11 @@ package com.zakrzewski.services;
 
 import com.zakrzewski.entity.Client;
 import com.zakrzewski.repositories.ClientRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Service
 public class BankService {
 
     private ClientRepository clientRepository;
