@@ -19,35 +19,49 @@
             </plugin>
         </plugins>
     </build>
+    <properties>
+        <mockito-core.version>3.4.6</mockito-core.version>
+        <junit-jupiter-api.version>5.6.2</junit-jupiter-api.version>
+        <junit-jupiter-engine.version>5.6.2</junit-jupiter-engine.version>
+        <postgresql.version>42.2.5</postgresql.version>
+        <assertj-core.version>3.16.1</assertj-core.version>
+        <hibernate-core.version>5.4.21.Final</hibernate-core.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.6.2</version>
+            <version>${junit-jupiter-api.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.6.2</version>
+            <version>${junit-jupiter-engine.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.5</version>
+            <version>${postgresql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito-core.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.16.1</version>
+            <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.4.21.Final</version>
+            <version>${hibernate-core.version}</version>
         </dependency>
     </dependencies>
 </project>

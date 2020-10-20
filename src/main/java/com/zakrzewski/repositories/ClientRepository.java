@@ -4,6 +4,6 @@ import com.zakrzewski.entity.Client;
 
 public interface ClientRepository {
 
-    void addClient(Client client);
+    void saveClient(Client client);
     Client findClientByEmail(String email);
 }

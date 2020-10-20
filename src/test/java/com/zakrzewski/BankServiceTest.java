@@ -1,35 +1,32 @@
 package com.zakrzewski;
 
 
+import com.zakrzewski.entity.Account;
 import com.zakrzewski.entity.Client;
-import com.zakrzewski.repositories.InMemoryClientRepository;
+import com.zakrzewski.repositories.ClientRepository;
 import com.zakrzewski.services.BankService;
 import com.zakrzewski.services.NotEnoughFundsException;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 public class BankServiceTest {
-   /* private List<Client> clients;
-    private InMemoryClientRepository inMemoryClientRepository;
     private BankService bankService;
+    private ClientRepository repository;
 
     @BeforeEach
-    public void setup(){
-        clients = new ArrayList<>();
-        inMemoryClientRepository = new InMemoryClientRepository(clients);
-        bankService = new BankService(inMemoryClientRepository);
+    public void setup() {
+        repository = mock(ClientRepository.class);
+        bankService = new BankService(repository);
     }
 
-    @Test
+    /*@Test
     public void verifyIfUserIsAddingCorrectlyToTheRepository(){
         //given
         Client client = new Client("Michał", "michal@gmail.com", 500);
@@ -41,60 +38,63 @@ public class BankServiceTest {
                 .get();
         //then
         assertEquals(expectedClient, actualClient);
-    }
+    }*/
 
     @Test
     public void transferAmount_allParamsOk_fundsTransferred() {
         //given
-        Client clientFrom = new Client("Michał",  "michal@gmail.com", 50000);
-        Client clientTo = new Client("Client",  "client@gmail.com", 10000);
-        final double amountToTransfer = 10000;
-        clients.add(clientFrom);
-        clients.add(clientTo);
+        Client clientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(1000, "PLN")));
+        Client clientTo = new Client("Client", "client@gmail.com", Collections.singletonList(new Account(500, "PLN")));
+        final double amountToTransfer = 100;
+        when(repository.findClientByEmail(clientFrom.getEmailAddress())).thenReturn(clientFrom);
+        when(repository.findClientByEmail(clientTo.getEmailAddress())).thenReturn(clientTo);
+
         //when
         bankService.transferAmount(clientFrom.getEmailAddress(), clientTo.getEmailAddress(), amountToTransfer);
         //then
-/*        SoftAssertions softAssertions = new SoftAssertions();
+        Client expectedClientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(900, "PLN")));
+        Client expectedClientTo = new Client("Client", "client@gmail.com", Collections.singletonList(new Account(600, "PLN")));
+        verify(repository).saveClient(expectedClientFrom);
+        verify(repository).saveClient(expectedClientTo);
+
+        /*SoftAssertions softAssertions = new SoftAssertions();
         softAssertions
-                .assertThat(clientFrom.getAmount())
-                .isEqualTo(40000);
+                .assertThat(clientFrom.getBalance())
+                .isEqualTo(900);
         softAssertions
-                .assertThat(clientTo.getAmount())
-                .isEqualTo(20000);
-        softAssertions.assertAll();*/
-        /*assertEquals(40000, clientFrom.getBalance());
-        assertEquals(20000, clientTo.getBalance() );
+                .assertThat(clientTo.getBalance())
+                .isEqualTo(600);
+        softAssertions.assertAll();
+        assertEquals(40000, clientFrom.getBalance());
+        assertEquals(20000, clientTo.getBalance() );*/
     }
 
     @Test
     public void transfer_sendAllFunds_fundsTransferred(){
         //given
-        Client clientFrom = new Client("Michał",  "michal@gmail.com", 5000 );
-        Client clientTo = new Client("Client", "client@gmail.com", 10000);
-        final double amountToTransfer = 50000;
-        clients.add(clientFrom);
-        clients.add(clientTo);
+        Client clientFrom = new Client("Michał",  "michal@gmail.com", Collections.singletonList(new Account(1000, "PLN")));
+        Client clientTo = new Client("Client", "client@gmail.com", Collections.singletonList(new Account(500, "PLN")));
+        final double amountToTransfer = 1000;
+        when(repository.findClientByEmail(clientFrom.getEmailAddress())).thenReturn(clientFrom);
+        when(repository.findClientByEmail(clientTo.getEmailAddress())).thenReturn(clientTo);
         //when
         bankService.transferAmount(clientFrom.getEmailAddress(), clientTo.getEmailAddress(), amountToTransfer);
         //then
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions
-                .assertThat(clientFrom.getBalance())
-                .isEqualTo(0);
-        softAssertions
-                .assertThat(clientTo.getBalance())
-                .isEqualTo(60000);
-        softAssertions.assertAll();
+        Client expectedClientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(0, "PLN")));
+        Client expectedClientTo = new Client("Client", "client@gmail.com", Collections.singletonList(new Account(1500, "PLN")));
+        verify(repository).saveClient(expectedClientFrom);
+        verify(repository).saveClient(expectedClientTo);
+
     }
 
     @Test
     public void transfer_notEnoughFunds_throwNotEnoughFundException(){
         //given
-        Client clientFrom = new Client("Michał", "michal@gmail.com", 50000);
-        Client clientTo = new Client("Client", "client@gmail.com", 10000);
-        final double amountToTransfer = 60000;
-        clients.add(clientFrom);
-        clients.add(clientTo);
+        Client clientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(1000, "PLN")));
+        Client clientTo = new Client("Client", "client@gmail.com", Collections.singletonList(new Account(500, "PLN")));
+        final double amountToTransfer = 10000;
+        when(repository.findClientByEmail(clientFrom.getEmailAddress())).thenReturn(clientFrom);
+        when(repository.findClientByEmail(clientTo.getEmailAddress())).thenReturn(clientFrom);
         // when/then
         assertThrows(NotEnoughFundsException.class, () -> bankService.transferAmount(clientFrom.getEmailAddress(), clientTo.getEmailAddress(), amountToTransfer));
     }
@@ -102,21 +102,20 @@ public class BankServiceTest {
     @Test
     public void transfer_negativeAmount_throwIllegalArgumentException(){
         //given
-        Client clientFrom = new Client("Michał", "michal@gmail.com", 50000);
-        Client clientTo = new Client("Client", "client@gmail.com",  10000);
+        Client clientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(1000, "PLN")));
+        Client clientTo = new Client("Client", "client@gmail.com",  Collections.singletonList(new Account(500, "PLN")));
         final double amountToTransfer = -5000;
-        clients.add(clientFrom);
-        clients.add(clientTo);
         // when/then
-        assertThrows(IllegalArgumentException.class, () -> bankService.transferAmount(clientFrom.getEmailAddress(), clientTo.getEmailAddress(), amountToTransfer));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> bankService.transferAmount(clientFrom.getEmailAddress(), clientTo.getEmailAddress(), amountToTransfer));
     }
 
     @Test
     public void transfer_toSameClient_thrownIllegalArgumentException(){
         //given
-        Client clientFrom = new Client("Michał", "michal@gmail.com", 50000);
-        clients.add(clientFrom);
-        final double amountToTransfer = 2000;
+        Client clientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(1000, "PLN")));
+        final double amountToTransfer = 1000;
         // when/then
         assertThrows(IllegalArgumentException.class, () -> bankService.transferAmount(clientFrom.getEmailAddress(), clientFrom.getEmailAddress(), amountToTransfer));
     }
@@ -124,35 +123,38 @@ public class BankServiceTest {
     @Test
     public void withdrawAmount_correctAmount_balanceChangedCorrectly(){
         //given
-        Client client = new Client("Michał", "michal@gmail.com", 50000);
-        clients.add(client);
+        Client client = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(100, "PLN")));
+        when(repository.findClientByEmail(client.getEmailAddress())).thenReturn(client);
         //when
-        bankService.withdrawAmount(client.getEmailAddress(), 40000);
+        bankService.withdrawAmount(client.getEmailAddress(), 50);
         //then
-        assertEquals(10000, client.getBalance());
+        Client expectedClient = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(50, "PLN")));
+        verify(repository).saveClient(expectedClient);
+        assertEquals(50, expectedClient.getBalance());
     }
 
     @Test
     public void withdrawAmount_allBalance_balanceSetToZero(){
         //given
-        Client client = new Client("Michał", "michal@gmail.com", 50000);
-        clients.add(client);
+        Client client = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(1000, "PLN")));
+        when(repository.findClientByEmail(client.getEmailAddress())).thenReturn(client);
         //when
-        bankService.withdrawAmount(client.getEmailAddress(), 50000);
+        bankService.withdrawAmount(client.getEmailAddress(), 1000);
         //then
-        assertEquals(0, client.getBalance());
+        Client expectedClient = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(0, "PLN")));
+        verify(repository).saveClient(expectedClient);
+        assertEquals(0, expectedClient.getBalance());
     }
 
     @Test
     public void withdrawAmount_negativeAmount_throwIllegalArgumentException(){
         //given
-        Client client = new Client("Michał", "michal@gmail.com",  50000);
-        clients.add(client);
+        Client client = new Client("Michał", "michal@gmail.com",  Collections.singletonList(new Account(1000, "PLN")));
         int amount = -10000;
         // when/then
         Assertions.assertThrows(IllegalArgumentException.class, () -> bankService.withdrawAmount(client.getEmailAddress(), amount));
     }
-
+   /*
     @Test
     public void withdrawAmount_zeroAmount_throwIllegalArgumentException(){
         //given

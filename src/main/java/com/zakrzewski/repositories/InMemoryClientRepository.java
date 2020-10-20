@@ -14,7 +14,7 @@ public class InMemoryClientRepository implements ClientRepository {
         this.clients = clients;
     }
 
-    public void addClient(Client client) {
+    public void saveClient(Client client) {
         clients.add(client);
     }
 

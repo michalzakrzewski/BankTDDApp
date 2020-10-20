@@ -11,7 +11,7 @@ public class JDBCClientRepository implements ClientRepository {
     public static final String PASSWORD = "kanapka";
     public static final String JDBC_URL = "jdbc:postgresql://localhost:5432/test_db";
     @Override
-    public void addClient(Client client) {
+    public void saveClient(Client client) {
         try(Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String firstName = client.getName();
             String emailAddress = client.getEmailAddress();

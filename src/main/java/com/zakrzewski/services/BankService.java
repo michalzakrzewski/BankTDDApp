@@ -14,7 +14,7 @@ public class BankService {
     }
 
     public void saveClient(Client client){
-        clientRepository.addClient(client);
+        clientRepository.saveClient(client);
     }
 
     public Client findClientByEmailAddress(String emailAddress){
@@ -35,6 +35,9 @@ public class BankService {
             throw new NotEnoughFundsException("Not enough funds");
         }
 
+        clientRepository.saveClient(fromClient);
+        clientRepository.saveClient(toClient);
+
     }
 
 
@@ -50,6 +53,7 @@ public class BankService {
         }
         double newBalance = clientByEmail.getBalance() - amount;
         clientByEmail.setBalance(newBalance);
+        clientRepository.saveClient(clientByEmail);
     }
 
     private void validateAmount(double amount) {

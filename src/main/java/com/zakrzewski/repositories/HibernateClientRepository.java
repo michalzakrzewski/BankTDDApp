@@ -6,7 +6,7 @@ import org.hibernate.query.Query;
 
 public class HibernateClientRepository implements ClientRepository {
     @Override
-    public void addClient(Client client) {
+    public void saveClient(Client client) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
         client
