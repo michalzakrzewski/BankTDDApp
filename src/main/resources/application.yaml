@@ -1,0 +1,6 @@
+jdbc:
+  url: "jdbc:postgresql://localhost:5432/test_db"
+  user: "postgres"
+  password: "kanapka"
+
+

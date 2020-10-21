@@ -1,11 +1,13 @@
 package com.zakrzewski.repositories;
 
+import com.zakrzewski.annotations.HibernateRepository;
 import com.zakrzewski.entity.Client;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@HibernateRepository
 public class HibernateClientRepository implements ClientRepository {
     @Override
     public void saveClient(Client client) {

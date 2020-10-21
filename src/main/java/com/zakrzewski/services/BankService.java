@@ -1,7 +1,12 @@
 package com.zakrzewski.services;
 
+import com.zakrzewski.annotations.HibernateRepository;
+import com.zakrzewski.annotations.InMemoryRepository;
+import com.zakrzewski.annotations.JDBCRepository;
 import com.zakrzewski.entity.Client;
 import com.zakrzewski.repositories.ClientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -11,7 +16,8 @@ public class BankService {
 
     private ClientRepository clientRepository;
 
-    public BankService(ClientRepository clientRepository) {
+    @Autowired
+    public BankService(@JDBCRepository ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 

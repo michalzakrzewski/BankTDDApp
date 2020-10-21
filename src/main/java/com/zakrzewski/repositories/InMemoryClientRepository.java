@@ -1,11 +1,14 @@
 package com.zakrzewski.repositories;
 
+import com.zakrzewski.annotations.InMemoryRepository;
 import com.zakrzewski.entity.Client;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+@Repository
 public class InMemoryClientRepository implements ClientRepository {
 
     private List<Client> clients;

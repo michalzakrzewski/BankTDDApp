@@ -1,18 +1,29 @@
 package com.zakrzewski.repositories;
 
+import com.zakrzewski.annotations.JDBCRepository;
 import com.zakrzewski.entity.Client;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.util.ArrayList;
 
+@Repository
+@JDBCRepository
 public class JDBCClientRepository implements ClientRepository {
 
-    public static final String USER = "postgres";
-    public static final String PASSWORD = "kanapka";
-    public static final String JDBC_URL = "jdbc:postgresql://localhost:5432/test_db";
+    public final String user;
+    public final String password;
+    public final String jdbcUrl;
+
+    public JDBCClientRepository(@Value("${jdbc.user}") String user, @Value("${jdbc.password}") String password, @Value("${jdbc.url}") String jdbcUrl) {
+        this.user = user;
+        this.password = password;
+        this.jdbcUrl = jdbcUrl;
+    }
+
     @Override
     public void saveClient(Client client) {
-        try(Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+        try(Connection connection = DriverManager.getConnection(jdbcUrl, user, password)) {
             String firstName = client.getName();
             String emailAddress = client.getEmailAddress();
             //Dlaczego nie VALUES('"+firstName"', '"+emailAddress+"')? Dlatego, że jak ktoś wpisze email jakiś i dopisze do niego DROP TABLE xxx to poleci baza.
@@ -28,7 +39,7 @@ public class JDBCClientRepository implements ClientRepository {
 
     @Override
     public Client findClientByEmail(String email) {
-        try(Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+        try(Connection connection = DriverManager.getConnection(jdbcUrl, user, password)) {
             //Dlaczego nie VALUES('"+firstName"', '"+emailAddress+"')? Dlatego, że jak ktoś wpisze email jakiś i dopisze do niego DROP TABLE xxx to poleci baza.
             //Dlatego zawsze jest jakaś funkcja, która umożliwia wstawienie naszych stringow.
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT first_name, mail FROM USERS WHERE mail=?");
