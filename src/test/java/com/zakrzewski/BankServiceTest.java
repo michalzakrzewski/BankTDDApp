@@ -4,6 +4,7 @@ package com.zakrzewski;
 import com.zakrzewski.entity.Account;
 import com.zakrzewski.entity.Client;
 import com.zakrzewski.repositories.ClientRepository;
+import com.zakrzewski.repositories.ClientSpringJPARepository;
 import com.zakrzewski.services.BankService;
 import com.zakrzewski.services.NotEnoughFundsException;
 import org.junit.jupiter.api.Assertions;
@@ -18,11 +19,11 @@ import static org.mockito.Mockito.*;
 
 public class BankServiceTest {
     private BankService bankService;
-    private ClientRepository repository;
+    private ClientSpringJPARepository repository;
 
     @BeforeEach
     public void setup() {
-        repository = mock(ClientRepository.class);
+        repository = mock(ClientSpringJPARepository.class);
         bankService = new BankService(repository);
     }
 
@@ -54,8 +55,8 @@ public class BankServiceTest {
         //then
         Client expectedClientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(900, "PLN")));
         Client expectedClientTo = new Client("Client", "client@gmail.com", Collections.singletonList(new Account(600, "PLN")));
-        verify(repository).saveClient(expectedClientFrom);
-        verify(repository).saveClient(expectedClientTo);
+        verify(repository).save(expectedClientFrom);
+        verify(repository).save(expectedClientTo);
 
         /*SoftAssertions softAssertions = new SoftAssertions();
         softAssertions
@@ -82,8 +83,8 @@ public class BankServiceTest {
         //then
         Client expectedClientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(0, "PLN")));
         Client expectedClientTo = new Client("Client", "client@gmail.com", Collections.singletonList(new Account(1500, "PLN")));
-        verify(repository).saveClient(expectedClientFrom);
-        verify(repository).saveClient(expectedClientTo);
+        verify(repository).save(expectedClientFrom);
+        verify(repository).save(expectedClientTo);
 
     }
 
@@ -129,7 +130,7 @@ public class BankServiceTest {
         bankService.withdrawAmount(client.getEmailAddress(), 50);
         //then
         Client expectedClient = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(50, "PLN")));
-        verify(repository).saveClient(expectedClient);
+        verify(repository).save(expectedClient);
         assertEquals(50, expectedClient.getBalance());
     }
 
@@ -142,7 +143,7 @@ public class BankServiceTest {
         bankService.withdrawAmount(client.getEmailAddress(), 1000);
         //then
         Client expectedClient = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(0, "PLN")));
-        verify(repository).saveClient(expectedClient);
+        verify(repository).save(expectedClient);
         assertEquals(0, expectedClient.getBalance());
     }
 

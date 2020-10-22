@@ -5,6 +5,7 @@ import com.zakrzewski.annotations.InMemoryRepository;
 import com.zakrzewski.annotations.JDBCRepository;
 import com.zakrzewski.entity.Client;
 import com.zakrzewski.repositories.ClientRepository;
+import com.zakrzewski.repositories.ClientSpringJPARepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,15 +15,15 @@ import java.util.Objects;
 @Service
 public class BankService {
 
-    private ClientRepository clientRepository;
+    private ClientSpringJPARepository clientRepository;
 
     @Autowired
-    public BankService(@JDBCRepository ClientRepository clientRepository) {
+    public BankService(ClientSpringJPARepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 
     public void saveClient(Client client){
-        clientRepository.saveClient(client);
+        clientRepository.save(client);
     }
 
     public Client findClientByEmailAddress(String emailAddress){
@@ -43,8 +44,8 @@ public class BankService {
             throw new NotEnoughFundsException("Not enough funds");
         }
 
-        clientRepository.saveClient(fromClient);
-        clientRepository.saveClient(toClient);
+        clientRepository.save(fromClient);
+        clientRepository.save(toClient);
 
     }
 
@@ -61,7 +62,7 @@ public class BankService {
         }
         double newBalance = clientByEmail.getBalance() - amount;
         clientByEmail.setBalance(newBalance);
-        clientRepository.saveClient(clientByEmail);
+        clientRepository.save(clientByEmail);
     }
 
     private void validateAmount(double amount) {
