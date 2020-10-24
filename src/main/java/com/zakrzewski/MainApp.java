@@ -2,11 +2,15 @@ package com.zakrzewski;
 
 import com.zakrzewski.entity.Account;
 import com.zakrzewski.entity.Client;
+import com.zakrzewski.repositories.ClientSpringJPARepository;
 import com.zakrzewski.services.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,18 +19,37 @@ import java.util.Scanner;
 @SpringBootApplication
 public class MainApp implements CommandLineRunner {
     private BankService bankService;
+    private ClientSpringJPARepository repository;
 
     @Autowired
-    public MainApp(BankService bankService) {
+    public MainApp(BankService bankService, ClientSpringJPARepository repository) {
         this.bankService = bankService;
+        this.repository = repository;
     }
 
     public static void main(String[] args) {
         SpringApplication.run(MainApp.class, args);
     }
     @Override
-    public void run(String... args) throws Exception {
-        try (Scanner scanner = new Scanner(System.in)) {
+    public void run(String... args) {
+
+        List<Client> clientList = repository.findClientByName("Michał");
+        clientList.forEach(System.out::println);
+
+        Page<Client> clientPage = repository.findClientByName("Michał", PageRequest.of(0, 1, Sort.by("email")));
+        System.out.println(clientPage);
+        clientPage.getContent().forEach(System.out::println);
+        int totalPages = clientPage.getTotalPages();
+        for (int i = 1; i < totalPages; i++) {
+            Page<Client> page = repository.findClientByName("Michał", PageRequest.of(i, 1, Sort.by("email")));
+            System.out.println(page);
+            page.getContent().forEach(System.out::println);
+
+        }
+        System.out.println("===============================================");
+        List<Client> allByName = repository.findAll(Sort.by("name"));
+        allByName.forEach(System.out::println);
+        /*try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 System.out.println("1 - add user");
                 System.out.println("2 - find user");
@@ -46,7 +69,7 @@ public class MainApp implements CommandLineRunner {
                     transferAmount(scanner);
                 }
             }
-        }
+        }*/
     }
 
     private void printUser(Scanner scanner) {

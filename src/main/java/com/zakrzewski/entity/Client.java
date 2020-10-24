@@ -17,18 +17,18 @@ public class Client {
     private String name;
 
     @Column(name = "MAIL")
-    private String emailAddress;
+    private String email;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_ID")
     private List<Account> accounts;
 
     public Client() {
     }
 
-    public Client(String name, String emailAddress, List<Account> accounts) {
+    public Client(String name, String email, List<Account> accounts) {
         this.name = name;
-        this.emailAddress = emailAddress;
+        this.email = email;
         this.accounts = accounts;
     }
 
@@ -49,11 +49,11 @@ public class Client {
     }
 
     public String getEmailAddress() {
-        return emailAddress;
+        return email;
     }
 
     public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+        this.email = emailAddress;
     }
 
     public List<Account> getAccounts() {
@@ -71,13 +71,13 @@ public class Client {
         Client client = (Client) o;
         return Objects.equals(id, client.id) &&
                 Objects.equals(name, client.name) &&
-                Objects.equals(emailAddress, client.emailAddress) &&
+                Objects.equals(email, client.email) &&
                 Objects.equals(accounts, client.accounts);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, emailAddress, accounts);
+        return Objects.hash(id, name, email, accounts);
     }
 
 
@@ -99,7 +99,7 @@ public class Client {
         return "Client{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
+                ", emailAddress='" + email + '\'' +
                 ", accounts=" + accounts +
                 '}';
     }

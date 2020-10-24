@@ -25,7 +25,8 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40">
-        <schema name="public" object-types="view, table" />
+        <schema name="pg_catalog" object-types="table, function, view" />
+        <schema name="public" object-types="constraint, table, dataset trigger, index, function, view, column" />
       </connection>
     </loaded-nodes>
   </component>
@@ -86,7 +87,10 @@ update accounts set balance=90 where account_id=1;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40" object-ref="schemas/public/tables/accounts" />
+      <object connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40" object-ref="schemas/public/tables/users" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="d92b7030-d170-4c17-8a0a-2e825a7dab40" />

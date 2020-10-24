@@ -3,7 +3,6 @@ package com.zakrzewski;
 
 import com.zakrzewski.entity.Account;
 import com.zakrzewski.entity.Client;
-import com.zakrzewski.repositories.ClientRepository;
 import com.zakrzewski.repositories.ClientSpringJPARepository;
 import com.zakrzewski.services.BankService;
 import com.zakrzewski.services.NotEnoughFundsException;

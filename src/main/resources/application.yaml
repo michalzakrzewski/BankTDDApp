@@ -1,6 +1,10 @@
-jdbc:
-  url: "jdbc:postgresql://localhost:5432/test_db"
-  user: "postgres"
-  password: "kanapka"
+spring:
+  datasource:
+    username: "postgres"
+    password: "kanapka"
+    url: "jdbc:postgresql://localhost:5432/test_db"
+    driver-class: "org.postgresql.Driver"
+  jpa:
+    show-sql: false
 
 
