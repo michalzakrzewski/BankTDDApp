@@ -46,11 +46,11 @@ public class BankServiceTest {
         Client clientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(1000, "PLN")));
         Client clientTo = new Client("Client", "client@gmail.com", Collections.singletonList(new Account(500, "PLN")));
         final double amountToTransfer = 100;
-        when(repository.findClientByEmail(clientFrom.getEmailAddress())).thenReturn(clientFrom);
-        when(repository.findClientByEmail(clientTo.getEmailAddress())).thenReturn(clientTo);
+        when(repository.findClientByEmail(clientFrom.getEmail())).thenReturn(clientFrom);
+        when(repository.findClientByEmail(clientTo.getEmail())).thenReturn(clientTo);
 
         //when
-        bankService.transferAmount(clientFrom.getEmailAddress(), clientTo.getEmailAddress(), amountToTransfer);
+        bankService.transferAmount(clientFrom.getEmail(), clientTo.getEmail(), amountToTransfer);
         //then
         Client expectedClientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(900, "PLN")));
         Client expectedClientTo = new Client("Client", "client@gmail.com", Collections.singletonList(new Account(600, "PLN")));
@@ -75,10 +75,10 @@ public class BankServiceTest {
         Client clientFrom = new Client("Michał",  "michal@gmail.com", Collections.singletonList(new Account(1000, "PLN")));
         Client clientTo = new Client("Client", "client@gmail.com", Collections.singletonList(new Account(500, "PLN")));
         final double amountToTransfer = 1000;
-        when(repository.findClientByEmail(clientFrom.getEmailAddress())).thenReturn(clientFrom);
-        when(repository.findClientByEmail(clientTo.getEmailAddress())).thenReturn(clientTo);
+        when(repository.findClientByEmail(clientFrom.getEmail())).thenReturn(clientFrom);
+        when(repository.findClientByEmail(clientTo.getEmail())).thenReturn(clientTo);
         //when
-        bankService.transferAmount(clientFrom.getEmailAddress(), clientTo.getEmailAddress(), amountToTransfer);
+        bankService.transferAmount(clientFrom.getEmail(), clientTo.getEmail(), amountToTransfer);
         //then
         Client expectedClientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(0, "PLN")));
         Client expectedClientTo = new Client("Client", "client@gmail.com", Collections.singletonList(new Account(1500, "PLN")));
@@ -93,10 +93,10 @@ public class BankServiceTest {
         Client clientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(1000, "PLN")));
         Client clientTo = new Client("Client", "client@gmail.com", Collections.singletonList(new Account(500, "PLN")));
         final double amountToTransfer = 10000;
-        when(repository.findClientByEmail(clientFrom.getEmailAddress())).thenReturn(clientFrom);
-        when(repository.findClientByEmail(clientTo.getEmailAddress())).thenReturn(clientFrom);
+        when(repository.findClientByEmail(clientFrom.getEmail())).thenReturn(clientFrom);
+        when(repository.findClientByEmail(clientTo.getEmail())).thenReturn(clientFrom);
         // when/then
-        assertThrows(NotEnoughFundsException.class, () -> bankService.transferAmount(clientFrom.getEmailAddress(), clientTo.getEmailAddress(), amountToTransfer));
+        assertThrows(NotEnoughFundsException.class, () -> bankService.transferAmount(clientFrom.getEmail(), clientTo.getEmail(), amountToTransfer));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class BankServiceTest {
         // when/then
         assertThrows(
                 IllegalArgumentException.class,
-                () -> bankService.transferAmount(clientFrom.getEmailAddress(), clientTo.getEmailAddress(), amountToTransfer));
+                () -> bankService.transferAmount(clientFrom.getEmail(), clientTo.getEmail(), amountToTransfer));
     }
 
     @Test
@@ -117,16 +117,16 @@ public class BankServiceTest {
         Client clientFrom = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(1000, "PLN")));
         final double amountToTransfer = 1000;
         // when/then
-        assertThrows(IllegalArgumentException.class, () -> bankService.transferAmount(clientFrom.getEmailAddress(), clientFrom.getEmailAddress(), amountToTransfer));
+        assertThrows(IllegalArgumentException.class, () -> bankService.transferAmount(clientFrom.getEmail(), clientFrom.getEmail(), amountToTransfer));
     }
 
     @Test
     public void withdrawAmount_correctAmount_balanceChangedCorrectly(){
         //given
         Client client = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(100, "PLN")));
-        when(repository.findClientByEmail(client.getEmailAddress())).thenReturn(client);
+        when(repository.findClientByEmail(client.getEmail())).thenReturn(client);
         //when
-        bankService.withdrawAmount(client.getEmailAddress(), 50);
+        bankService.withdrawAmount(client.getEmail(), 50);
         //then
         Client expectedClient = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(50, "PLN")));
         verify(repository).save(expectedClient);
@@ -137,9 +137,9 @@ public class BankServiceTest {
     public void withdrawAmount_allBalance_balanceSetToZero(){
         //given
         Client client = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(1000, "PLN")));
-        when(repository.findClientByEmail(client.getEmailAddress())).thenReturn(client);
+        when(repository.findClientByEmail(client.getEmail())).thenReturn(client);
         //when
-        bankService.withdrawAmount(client.getEmailAddress(), 1000);
+        bankService.withdrawAmount(client.getEmail(), 1000);
         //then
         Client expectedClient = new Client("Michał", "michal@gmail.com", Collections.singletonList(new Account(0, "PLN")));
         verify(repository).save(expectedClient);
@@ -152,7 +152,7 @@ public class BankServiceTest {
         Client client = new Client("Michał", "michal@gmail.com",  Collections.singletonList(new Account(1000, "PLN")));
         int amount = -10000;
         // when/then
-        Assertions.assertThrows(IllegalArgumentException.class, () -> bankService.withdrawAmount(client.getEmailAddress(), amount));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> bankService.withdrawAmount(client.getEmail(), amount));
     }
    /*
     @Test

@@ -48,12 +48,12 @@ public class Client {
         this.name = name;
     }
 
-    public String getEmailAddress() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.email = emailAddress;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<Account> getAccounts() {
