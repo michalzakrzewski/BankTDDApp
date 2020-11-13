@@ -25,7 +25,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40">
-        <schema name="public" object-types="column, constraint, table, view, index, dataset trigger" />
+        <schema name="public" object-types="table, constraint, index, view, dataset trigger, column" />
       </connection>
     </loaded-nodes>
   </component>
@@ -87,8 +87,8 @@ update accounts set balance=90 where account_id=1;]]></console>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
-      <object connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40" object-ref="schemas/public/tables/accounts" />
       <object connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40" object-ref="schemas/public/tables/users" />
+      <object connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40" object-ref="schemas/public/tables/accounts" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
@@ -104,6 +104,9 @@ update accounts set balance=90 where account_id=1;]]></console>
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
+  </component>
+  <component name="DBNavigator.Project.ExecutionManager">
+    <retain-sticky-names value="false" />
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
     <method-browser />
