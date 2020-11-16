@@ -25,7 +25,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40">
-        <schema name="public" object-types="table, constraint, index, view, dataset trigger, column" />
+        <schema name="public" object-types="column, dataset trigger, table, constraint, index, view" />
       </connection>
     </loaded-nodes>
   </component>
@@ -86,10 +86,7 @@ update accounts set balance=90 where account_id=1;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40" object-ref="schemas/public/tables/users" />
-      <object connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40" object-ref="schemas/public/tables/accounts" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="d92b7030-d170-4c17-8a0a-2e825a7dab40" />

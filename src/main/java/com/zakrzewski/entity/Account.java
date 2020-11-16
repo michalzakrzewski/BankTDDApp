@@ -18,6 +18,9 @@ public class Account {
     @Column(name = "CURRENCY")
     private String currency;
 
+    @Column(name = "USER_ID")
+    private Long userId;
+
     public Account() {
     }
     public Account(double balance, String currency) {
@@ -49,6 +52,14 @@ public class Account {
         this.currency = currency;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,12 +67,13 @@ public class Account {
         Account account = (Account) o;
         return Double.compare(account.balance, balance) == 0 &&
                 Objects.equals(id, account.id) &&
-                Objects.equals(currency, account.currency);
+                Objects.equals(currency, account.currency) &&
+                Objects.equals(userId, account.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, balance, currency);
+        return Objects.hash(id, balance, currency, userId);
     }
 
     @Override
@@ -70,6 +82,7 @@ public class Account {
                 "id=" + id +
                 ", balance=" + balance +
                 ", currency='" + currency + '\'' +
+                ", userId=" + userId +
                 '}';
     }
 }
