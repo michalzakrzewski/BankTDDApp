@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Entity
+@Table(name = "TRANSACTIONS")
 public class Transaction {
 
     @Id

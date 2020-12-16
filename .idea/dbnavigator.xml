@@ -25,7 +25,8 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40">
-        <schema name="public" object-types="column, dataset trigger, table, constraint, index, view" />
+        <schema name="pg_catalog" object-types="view, function, constraint, table" />
+        <schema name="public" object-types="index, column, view, function, dataset trigger, constraint, table" />
       </connection>
     </loaded-nodes>
   </component>
@@ -71,6 +72,18 @@ user_id serial not null,
 constraint accounts_users_fk foreign key (user_id) references users(user_id)
 );
 
+
+create table TRANSACTIONS(
+TRANSACTION_ID serial primary key,
+AMOUNT numeric not null,
+CURRENCY varchar(3) not null,
+TRANSACTION_DATE timestamp not null,
+FROM_ACCOUNT_ID serial not null,
+TO_ACCOUNT_ID serial not null,
+constraint TRANSACTIONS_ACCOUNT_TOFK foreign key (TO_ACCOUNT_ID) references accounts(account_id),
+constraint TRANSACTIONS_ACCOUNT_FROMFK foreign key (FROM_ACCOUNT_ID) references accounts(account_id)
+);
+
 insert into accounts(balance, currency, user_id) values (1000, 'PLN', 2);
 
 -- słowko kluczowe distinct (select distinct user_id) umożliwia wyświetlenie bez duplikatów
@@ -95,6 +108,7 @@ update accounts set balance=90 where account_id=1;]]></console>
     <filter-actions connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40" dataset="public.users" active-filter-id="a1c8870e-749c-49eb-8276-609ea642db8c">
       <filter id="a1c8870e-749c-49eb-8276-609ea642db8c" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND" />
     </filter-actions>
+    <filter-actions connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40" dataset="public.transactions" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="d92b7030-d170-4c17-8a0a-2e825a7dab40" dataset="public.accounts" active-filter-id="35819784-aaa4-476e-befb-2b74e6f815be">
       <filter id="35819784-aaa4-476e-befb-2b74e6f815be" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND" />
     </filter-actions>
